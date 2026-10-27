@@ -21,11 +21,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Book.AuthorID" class="control-label">Author</label>
-                <select asp-for="Book.AuthorID" class="form-control" asp-items="ViewBag.AuthorID">
-                    <option value="">-- Select author --</option>
-                </select>
-                <span asp-validation-for="Book.AuthorID" class="text-danger"></span>
+                <label asp-for="Book.AuthorID" class="control-label"></label>
+                <select asp-for="Book.AuthorID" class="form-control" asp-items="ViewBag.AuthorID"></select>
             </div>
 
             <div class="form-group">
@@ -41,14 +38,37 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Book.PublisherID" class="control-label">Publisher</label>
-                <select asp-for="Book.PublisherID" class="form-control" asp-items="ViewBag.PublisherID">
-                    <option value="">-- Select publisher --</option>
-                </select>
-                <span asp-validation-for="Book.PublisherID" class="text-danger"></span>
+                <label asp-for="Book.PublisherID" class="control-label"></label>
+                <select asp-for="Book.PublisherID" class="form-control" asp-items="ViewBag.PublisherID"></select>
             </div>
 
-            <div class="form-group mt-3">
+            <div class="form-group">
+                <div class="table">
+                    <table>
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                foreach (var cat in Model.AssignedCategoryDataList)
+                                {
+                                    if (cnt++ % 3 == 0)
+                                    {
+                                        @:</tr><tr>
+                                    }
+                                    @:<td>
+                                        <input type="checkbox"
+                                               name="selectedCategories"
+                                               value="@cat.CategoryID"
+                                               @(Html.Raw(cat.Assigned ? "checked=\"checked\"" : "")) />
+                                        @cat.Name
+                                    @:</td>
+                                }
+                                @:</tr>
+                            }
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -56,11 +76,10 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+             

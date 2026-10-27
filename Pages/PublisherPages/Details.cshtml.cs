@@ -2,19 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Albei_Alexandra_Lab2m.Models;
+using Albei_Alexandra_Lab2m;
 
 namespace Albei_Alexandra_Lab2m.Pages.PublisherPages;
 
-public class DeleteModel : PageModel
+public class DetailsModel : PageModel
 {
     private readonly Albei_Alexandra_Lab2mContext _context;
-
-    public DeleteModel(Albei_Alexandra_Lab2mContext context)
+    public DetailsModel(Albei_Alexandra_Lab2mContext context)
     {
         _context = context;
     }
 
-    [BindProperty]
     public Publisher Publisher { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
@@ -35,23 +34,5 @@ public class DeleteModel : PageModel
         }
 
         return Page();
-    }
-
-    public async Task<IActionResult> OnPostAsync(int? id)
-    {
-        if (id is null)
-        {
-            return NotFound();
-        }
-
-        var publisher = await _context.Publisher.FindAsync(id);
-        if (publisher != null)
-        {
-            Publisher = publisher;
-            _context.Publisher.Remove(Publisher);
-            await _context.SaveChangesAsync();
-        }
-
-        return RedirectToPage("./Index");
     }
 }

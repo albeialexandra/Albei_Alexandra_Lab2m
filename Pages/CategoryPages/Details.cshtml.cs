@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Albei_Alexandra_Lab2m.Models;
+using Albei_Alexandra_Lab2m;
 
-namespace Albei_Alexandra_Lab2m.Pages.PublisherPages;
+namespace Albei_Alexandra_Lab2m.Pages.CategoryPages;
 
 public class DetailsModel : PageModel
 {
@@ -13,7 +14,7 @@ public class DetailsModel : PageModel
         _context = context;
     }
 
-    public Publisher Publisher { get; set; } = default!;
+    public Category Category { get; set; } = default!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
@@ -22,14 +23,14 @@ public class DetailsModel : PageModel
             return NotFound();
         }
 
-        var publisher = await _context.Publisher.FirstOrDefaultAsync(m => m.ID == id);
-        if (publisher is null)
+        var category = await _context.Category.FirstOrDefaultAsync(m => m.ID == id);
+        if (category is null)
         {
             return NotFound();
         }
         else
         {
-            Publisher = publisher;
+            Category = category;
         }
 
         return Page();

@@ -2,37 +2,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Albei_Alexandra_Lab2m.Models;
-using Albei_Alexandra_Lab2m;
 
-namespace Albei_Alexandra_Lab2m.Pages.AuthorPages;
-
-public class DetailsModel : PageModel
+namespace Albei_Alexandra_Lab2m.Pages.Authors
 {
-    private readonly Albei_Alexandra_Lab2mContext _context;
-    public DetailsModel(Albei_Alexandra_Lab2mContext context)
+    public class DetailsModel : PageModel
     {
-        _context = context;
-    }
+        private readonly Albei_Alexandra_Lab2mContext _context;
 
-    public Author Author { get; set; } = default!;
-
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id is null)
+        public DetailsModel(Albei_Alexandra_Lab2mContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var author = await _context.Author.FirstOrDefaultAsync(m => m.ID == id);
-        if (author is null)
+        public Author Author { get; set; } = default!;
+
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            return NotFound();
-        }
-        else
-        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var author = await _context.Author.FirstOrDefaultAsync(m => m.ID == id);
+            if (author == null)
+            {
+                return NotFound();
+            }
+
             Author = author;
+            return Page();
         }
-
-        return Page();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Albei_Alexandra_Lab2m.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using Albei_Alexandra_Lab2m.Models;
 
 public class Author
 {
@@ -6,6 +7,7 @@ public class Author
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
 
+    [Display(Name = "Full Name")]
     public string FullName => $"{FirstName} {LastName}";
 
     public ICollection<Book>? Books { get; set; }

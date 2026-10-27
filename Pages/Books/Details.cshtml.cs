@@ -1,37 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Albei_Alexandra_Lab2m;
 using Albei_Alexandra_Lab2m.Models;
 
-namespace Albei_Alexandra_Lab2m.Pages.BookPages;
-
-public class DetailsModel : PageModel
+namespace Albei_Alexandra_Lab2m.Pages.BookPages
 {
-    private readonly Albei_Alexandra_Lab2mContext _context;
-    public DetailsModel(Albei_Alexandra_Lab2mContext context)
+    public class DetailsModel : PageModel
     {
-        _context = context;
-    }
+        private readonly Albei_Alexandra_Lab2mContext _context;
 
-    public Book Book { get; set; } = default!;
-
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id is null)
+        public DetailsModel(Albei_Alexandra_Lab2mContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        var book = await _context.Book.FirstOrDefaultAsync(m => m.ID == id);
-        if (book is null)
+        public Book Book { get; set; } = default!;
+
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
-            return NotFound();
-        }
-        else
-        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var book = await _context.Book
+                .Include(b => b.Publisher)
+                .Include(b => b.Author)
+                .Include(b => b.BookCategories).ThenInclude(bc => bc.Category)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.ID == id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
             Book = book;
+            return Page();
         }
-
-        return Page();
     }
 }

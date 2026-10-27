@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Albei_Alexandra_Lab2m.Models;
+using Albei_Alexandra_Lab2m;
 
 namespace Albei_Alexandra_Lab2m.Pages.PublisherPages;
 

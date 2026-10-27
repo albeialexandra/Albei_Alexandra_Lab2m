@@ -22,27 +22,6 @@ namespace Albei_Alexandra_Lab2m.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Author", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Author");
-                });
-
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Book", b =>
                 {
                     b.Property<int>("ID")
@@ -76,6 +55,46 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.ToTable("Book");
                 });
 
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.BookCategory", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("BookCategory");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Publisher", b =>
                 {
                     b.Property<int>("ID")
@@ -96,9 +115,30 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.ToTable("Publisher");
                 });
 
+            modelBuilder.Entity("Author", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Author");
+                });
+
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Book", b =>
                 {
-                    b.HasOne("Albei_Alexandra_Lab2m.Models.Author", "Author")
+                    b.HasOne("Author", "Author")
                         .WithMany("Books")
                         .HasForeignKey("AuthorID");
 
@@ -111,12 +151,41 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.Navigation("Publisher");
                 });
 
-            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Author", b =>
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.BookCategory", b =>
+                {
+                    b.HasOne("Albei_Alexandra_Lab2m.Models.Book", "Book")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("BookID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Albei_Alexandra_Lab2m.Models.Category", "Category")
+                        .WithMany("BookCategories")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Book", b =>
+                {
+                    b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Category", b =>
+                {
+                    b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Publisher", b =>
                 {
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Publisher", b =>
+            modelBuilder.Entity("Author", b =>
                 {
                     b.Navigation("Books");
                 });

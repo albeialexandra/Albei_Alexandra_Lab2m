@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Albei_Alexandra_Lab2m;
 using Albei_Alexandra_Lab2m.Models;
 
 namespace Albei_Alexandra_Lab2m.Pages.BookPages
 {
-    public class CreateModel : PageModel
+    public class CreateModel : BookCategoriesPageModel
     {
         private readonly Albei_Alexandra_Lab2mContext _context;
 
@@ -19,31 +20,42 @@ namespace Albei_Alexandra_Lab2m.Pages.BookPages
 
         public IActionResult OnGet()
         {
-            LoadDropdowns();
+            var authorList = _context.Author.Select(x => new
+            {
+                x.ID,
+                FullName = x.LastName + " " + x.FirstName
+            });
+            ViewData["AuthorID"] = new SelectList(authorList, "ID", "FullName");
+            ViewData["PublisherID"] = new SelectList(_context.Publisher, "ID", "PublisherName");
+
+            var book = new Book();
+            book.BookCategories = new List<BookCategory>();
+            PopulateAssignedCategoryData(_context, book);
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string[] selectedCategories)
         {
-            ModelState.Remove("Book.Author");
-            ModelState.Remove("Book.Publisher");
+            var newBook = new Book();
+            newBook.BookCategories = new List<BookCategory>();
 
-            if (!ModelState.IsValid)
+            if (selectedCategories != null)
             {
-                LoadDropdowns();
-                return Page();
+                foreach (var cat in selectedCategories)
+                {
+                    newBook.BookCategories.Add(new BookCategory
+                    {
+                        CategoryID = int.Parse(cat)
+                    });
+                }
             }
+
+            Book.BookCategories = newBook.BookCategories;
 
             _context.Book.Add(Book);
             await _context.SaveChangesAsync();
-
             return RedirectToPage("./Index");
-        }
-
-        private void LoadDropdowns()
-        {
-            ViewData["AuthorID"] = new SelectList(_context.Author, "ID", "FullName");
-            ViewData["PublisherID"] = new SelectList(_context.Publisher, "ID", "PublisherName");
         }
     }
 }
