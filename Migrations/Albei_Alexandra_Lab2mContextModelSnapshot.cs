@@ -78,6 +78,32 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.ToTable("BookCategory");
                 });
 
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Borrowing", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("BookID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MemberID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BookID");
+
+                    b.HasIndex("MemberID");
+
+                    b.ToTable("Borrowing");
+                });
+
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -93,6 +119,35 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Member", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Member");
                 });
 
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Publisher", b =>
@@ -170,14 +225,36 @@ namespace Albei_Alexandra_Lab2m.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Borrowing", b =>
+                {
+                    b.HasOne("Albei_Alexandra_Lab2m.Models.Book", "Book")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("BookID");
+
+                    b.HasOne("Albei_Alexandra_Lab2m.Models.Member", "Member")
+                        .WithMany("Borrowings")
+                        .HasForeignKey("MemberID");
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Member");
+                });
+
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Book", b =>
                 {
                     b.Navigation("BookCategories");
+
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Category", b =>
                 {
                     b.Navigation("BookCategories");
+                });
+
+            modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Member", b =>
+                {
+                    b.Navigation("Borrowings");
                 });
 
             modelBuilder.Entity("Albei_Alexandra_Lab2m.Models.Publisher", b =>

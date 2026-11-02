@@ -5,6 +5,8 @@ namespace Albei_Alexandra_Lab2m
 {
     public class Albei_Alexandra_Lab2mContext : DbContext
     {
+        public DbSet<Albei_Alexandra_Lab2m.Models.Borrowing> Borrowing { get; set; } = default!;
+        public DbSet<Albei_Alexandra_Lab2m.Models.Member> Member { get; set; } = default!;
         public DbSet<Albei_Alexandra_Lab2m.Models.Category> Category { get; set; } = default!;
         public Albei_Alexandra_Lab2mContext(DbContextOptions<Albei_Alexandra_Lab2mContext> options)
             : base(options)
