@@ -1,11 +1,13 @@
+using Albei_Alexandra_Lab2m;
+using Albei_Alexandra_Lab2m.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Albei_Alexandra_Lab2m;
-using Albei_Alexandra_Lab2m.Models;
 
 namespace Albei_Alexandra_Lab2m.Pages.BookPages
 {
+    [Authorize(Roles = "Admin")]
     public class CreateModel : BookCategoriesPageModel
     {
         private readonly Albei_Alexandra_Lab2mContext _context;

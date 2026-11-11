@@ -1,10 +1,12 @@
+using Albei_Alexandra_Lab2m.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Albei_Alexandra_Lab2m.Models;
 
 namespace Albei_Alexandra_Lab2m.Pages.BookPages;
 
+[Authorize(Roles = "Admin")]
 public class DeleteModel : PageModel
 {
     private readonly Albei_Alexandra_Lab2mContext _context;
@@ -36,7 +38,7 @@ public class DeleteModel : PageModel
 
         return Page();
     }
-
+    
     public async Task<IActionResult> OnPostAsync(int? id)
     {
         if (id is null)
